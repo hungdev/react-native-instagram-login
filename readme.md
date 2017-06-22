@@ -1,0 +1,44 @@
+# React Native Instagram login
+<p align="center">
+  <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/instagram.gif?raw=true" width=200/>
+</p>
+
+# Install
+
+```js
+Run npm install react-native-instagram-login --save
+```
+
+how to register instagram app?
+
+go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID
+
+# Usage:
+
+```javascript
+import InstagramLogin from 'react-native-instagram-login'
+<View>
+    <TouchableOpacity onPress={()=> this.refs.instagramLogin.show()}>
+        <Text style={{color: 'white'}}>Login</Text>
+    </TouchableOpacity>
+    <InstagramLogin
+        ref='instagramLogin'
+        clientId='xxxxxxxxxx'
+        scopes={['public_content', 'follower_list']}
+    />
+</View>
+
+```
+
+# Props
+
+Property | Type | Description
+------------ | ------------- | -------------
+clientId | PropTypes.string | Instagram App ClientId
+scopes | PropTypes.array | Array
+redirectUrl | PropTypes.string | String
+styles | PropTypes.object | Object
+onLoginSuccess | PropTypes.func | Function callback
+modalVisible | PropTypes.bool | true or false
+
+
