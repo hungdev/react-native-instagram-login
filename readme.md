@@ -9,7 +9,7 @@
 Run npm install react-native-instagram-login --save
 ```
 
-how to register instagram app?
+* How to get Client ID of instagram?
 
 go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID
 
