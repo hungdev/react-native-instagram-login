@@ -10,6 +10,7 @@
     "qs": "^6.4.0",
     "react": "16.0.0-alpha.12",
     "react-native": "0.45.1",
+    "react-native-cookie": "^0.1.1",
     "react-native-router-flux": "^3.40.1"
   },
   "devDependencies": {
