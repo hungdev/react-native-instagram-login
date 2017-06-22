@@ -41,4 +41,15 @@ styles | PropTypes.object | Object
 onLoginSuccess | PropTypes.func | Function callback
 modalVisible | PropTypes.bool | true or false
 
+* Logout
+to logout use clear cookies by using https://github.com/shimohq/react-native-cookie
 
+```js
+import Cookie from 'react-native-cookie'
+
+  logout() {
+    Cookie.clear().then(() => {
+      this.setState({ token: null })
+    })
+  }
+ ```
