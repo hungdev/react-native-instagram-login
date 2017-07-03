@@ -1,77 +1,77 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 import {
-  AppRegistry,
   StyleSheet,
-  Text,
   View,
   WebView,
-  ActivityIndicator,
   Alert,
   Modal,
   Dimensions,
   Image,
   TouchableOpacity,
-  Linking
-} from 'react-native';
+  KeyboardAvoidingView
+} from 'react-native'
 import qs from 'qs'
+const { width, height } = Dimensions.get('window')
 
 export default class Instagram extends Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
-    this.state = { modalVisible: false };
+    this.state = { modalVisible: false }
   }
 
-  show() {
+  show () {
     this.setState({ modalVisible: true })
   }
 
-  hide() {
+  hide () {
     this.setState({ modalVisible: false })
   }
 
-  _onNavigationStateChange(webViewState) {
+  _onNavigationStateChange (webViewState) {
     const { url } = webViewState
     if (url && url.startsWith(this.props.redirectUrl)) {
-      if (url) {
-        const [, queryString] = url.match(/#(.*)/)
-        const params = qs.parse(queryString)
+      const match = url.match(/#(.*)/)
+      if (match && match[1]) {
+        const params = qs.parse(match[1])
         if (params.access_token) {
           this.hide()
           this.props.onLoginSuccess(params.access_token)
         }
+      } else {
+        this.hide()
       }
-
     }
   }
 
-  render() {
+  render () {
     const { clientId, redirectUrl, scopes } = this.props
     return (
       <Modal
-        animationType={"slide"}
+        animationType={'slide'}
         visible={this.state.modalVisible}
-        onRequestClose={() => { alert("Modal has been closed.") }}
+        onRequestClose={this.hide.bind(this)}
         transparent
       >
         <View style={styles.modalWarp}>
-          <View style={styles.contentWarp}>
-            <WebView
-              style={[{ flex: 1 }, this.props.styles]}
-              source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=${scopes.join('+')}` }}
-              scalesPageToFit
-              startInLoadingState={true}
-              onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-              onError={this._onNavigationStateChange.bind(this)}
-            />
-            <TouchableOpacity onPress={this.hide.bind(this)} style={styles.btnStyle}>
-              <Image source={require('./close.png')} style={styles.closeStyle} />
-            </TouchableOpacity>
-          </View>
+          <KeyboardAvoidingView behavior='padding' style={styles.keyboardStyle}>
+            <View style={styles.contentWarp}>
+              <WebView
+                style={[{ flex: 1 }, this.props.styles]}
+                source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=${scopes.join('+')}` }}
+                scalesPageToFit
+                startInLoadingState
+                onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+                onError={this._onNavigationStateChange.bind(this)}
+              />
+              <TouchableOpacity onPress={this.hide.bind(this)} style={styles.btnStyle}>
+                <Image source={require('./close.png')} style={styles.closeStyle} />
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
         </View>
 
-      </Modal>
+      </Modal >
 
     )
   }
@@ -93,7 +93,7 @@ const defaultProps = {
       'Alert Title',
       'Token: ' + token,
       [
-        { text: 'OK' },
+        { text: 'OK' }
       ],
       { cancelable: false }
     )
@@ -103,7 +103,6 @@ const defaultProps = {
 Instagram.propTypes = propTypes
 Instagram.defaultProps = defaultProps
 
-
 const styles = StyleSheet.create({
   modalWarp: {
     flex: 1,
@@ -111,11 +110,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
+  keyboardStyle: {
+    flex: 1,
+    paddingTop: 30
+  },
   contentWarp: {
     backgroundColor: '#fff',
     alignSelf: 'center',
-    width: 350,
-    height: 225
+    width: width - 30,
+    height: height - 80
   },
   btnStyle: {
     width: 30,
@@ -127,4 +130,4 @@ const styles = StyleSheet.create({
   closeStyle: {
     width: 30, height: 30
   }
-});
+})

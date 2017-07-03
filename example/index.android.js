@@ -26,7 +26,6 @@ export default class InsLogin extends Component {
     Cookie.clear().then(() => {
       this.setState({ token: null })
     })
-
   }
 
   render() {
