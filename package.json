@@ -1,0 +1,27 @@
+{
+  "name": "react-native-instagram-login",
+  "version": "1.0.2",
+  "description": "instagram login",
+  "main": "Instagram.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hungdev/react-native-instagram-login.git"
+  },
+  "keywords": [
+    "instagram",
+    "login",
+    "auth"
+  ],
+  "author": "hung vu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hungdev/react-native-instagram-login/issues"
+  },
+  "homepage": "https://github.com/hungdev/react-native-instagram-login#readme"
+}
