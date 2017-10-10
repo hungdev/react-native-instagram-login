@@ -1,9 +1,8 @@
-package com.inslogin;
+package com.ins;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import im.shimo.react.cookie.CookieManagerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -23,9 +22,13 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new CookieManagerPackage()
+          new MainReactPackage()
       );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
     }
   };
 

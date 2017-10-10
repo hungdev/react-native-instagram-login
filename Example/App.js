@@ -6,20 +6,21 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
+  Platform,
   StyleSheet,
   Text,
   View,
-  Alert,
   TouchableOpacity
 } from 'react-native';
-import Ins from './Instagram'
+import Ins from 'react-native-instagram-login'
 import Cookie from 'react-native-cookie';
 
-export default class InsLogin extends Component {
+export default class App extends Component<{}> {
+  constructor(props) {
+    super(props)
+    this.state = {
 
-  state = {
-
+    }
   }
 
   logout() {
@@ -74,5 +75,3 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-
-AppRegistry.registerComponent('InsLogin', () => InsLogin);
