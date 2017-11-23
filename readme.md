@@ -42,7 +42,23 @@ styles | PropTypes.object | Object
 onLoginSuccess | PropTypes.func | Function callback
 modalVisible | PropTypes.bool | true or false
 
-* Logout
+
+## Styles
+
+To override default styles, set a custom `styles` prop.
+
+```javascript
+<InstagramLogin styles={styles} />
+
+const styles = StyleSheet.create({
+  closeStyle: {
+    marginTop: 22,
+  }
+});
+```
+
+
+# Logout
 
 To logout use clear cookies by using https://github.com/shimohq/react-native-cookie
 
