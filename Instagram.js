@@ -54,19 +54,19 @@ export default class Instagram extends Component {
         onRequestClose={this.hide.bind(this)}
         transparent
       >
-        <View style={styles.modalWarp}>
-          <KeyboardAvoidingView behavior='padding' style={styles.keyboardStyle}>
-            <View style={styles.contentWarp}>
+        <View style={[styles.modalWarp, this.props.styles.modalWarp]}>
+          <KeyboardAvoidingView behavior='padding' style={[styles.keyboardStyle, this.props.styles.keyboardStyle]}>
+            <View style={[styles.contentWarp, this.props.styles.contentWarp]}>
               <WebView
-                style={[{ flex: 1 }, this.props.styles]}
+                style={[styles.webView, this.props.styles.webView]}
                 source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=${scopes.join('+')}` }}
                 scalesPageToFit
                 startInLoadingState
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
                 onError={this._onNavigationStateChange.bind(this)}
               />
-              <TouchableOpacity onPress={this.hide.bind(this)} style={styles.btnStyle}>
-                <Image source={require('./close.png')} style={styles.closeStyle} />
+              <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
+                <Image source={require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
@@ -88,6 +88,7 @@ const propTypes = {
 
 const defaultProps = {
   redirectUrl: 'https://google.com',
+  styles: {},
   scopes: ['public_content'],
   onLoginSuccess: (token) => {
     Alert.alert(
@@ -120,6 +121,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width - 30,
     height: height - 80
+  },
+  webView: {
+    flex: 1,
   },
   btnStyle: {
     width: 30,
