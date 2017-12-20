@@ -12,7 +12,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView
 } from 'react-native'
-import qs from 'qs'
+import parse from 'querystringify';
+
 const { width, height } = Dimensions.get('window')
 
 export default class Instagram extends Component {
@@ -32,17 +33,30 @@ export default class Instagram extends Component {
   _onNavigationStateChange (webViewState) {
     const { url } = webViewState
     if (url && url.startsWith(this.props.redirectUrl)) {
-      const match = url.match(/#(.*)/)
-      if (match && match[1]) {
-        const params = qs.parse(match[1])
-        if (params.access_token) {
-          this.hide()
-          this.props.onLoginSuccess(params.access_token)
-        }
+      const results = parse(url)
+      this.hide()
+      if (results.access_token) {
+          // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
+          this.props.onLoginSuccess(results.access_token, results)
       } else {
-        this.hide()
+          this.props.onLoginFailure(results)
       }
     }
+  }
+
+  _onMessage (reactMessage) {
+      try {
+          const json = JSON.parse(reactMessage.nativeEvent.data)
+          if (json && json.error_type) {
+              this.hide()
+              this.props.onLoginFailure(json)
+          }
+      }catch(err) {}
+  }
+
+  _onLoadEnd () {
+      const scriptToPostBody = "window.postMessage(document.body.innerText, '*')";
+      this.webView.injectJavaScript(scriptToPostBody);
   }
 
   render () {
@@ -64,6 +78,9 @@ export default class Instagram extends Component {
                 startInLoadingState
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
                 onError={this._onNavigationStateChange.bind(this)}
+                onLoadEnd={this._onLoadEnd.bind(this)}
+                onMessage={this._onMessage.bind(this)}
+                ref={(webView) => {this.webView=webView}}
               />
               <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
                 <Image source={require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
@@ -83,7 +100,8 @@ const propTypes = {
   styles: PropTypes.object,
   scopes: PropTypes.array,
   onLoginSuccess: PropTypes.func,
-  modalVisible: PropTypes.bool
+  modalVisible: PropTypes.bool,
+  onLoginFailure: PropTypes.func
 }
 
 const defaultProps = {
@@ -99,6 +117,9 @@ const defaultProps = {
       ],
       { cancelable: false }
     )
+  },
+  onLoginFailure: (failureJson) => {
+    console.debug(failureJson)
   }
 }
 

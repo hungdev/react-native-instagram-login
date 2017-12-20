@@ -45,12 +45,16 @@ export default class App extends Component<{}> {
             </View>
           )
         }
+          {this.state.failure && <View>
+            <Text style={{ margin: 10 }}>failure: {JSON.stringify(this.state.failure)}</Text>
+          </View>}
         <Ins
           ref='ins'
           clientId='c7831304b961485a938674163166e606'
           redirectUrl='https://google.com'
           scopes={['public_content+follower_list']}
           onLoginSuccess={(token) => this.setState({ token })}
+          onLoginFailure={(data)  => this.setState({failure: data})}
         />
       </View>
     );
