@@ -33,8 +33,8 @@ export default class Instagram extends Component {
   _onNavigationStateChange (webViewState) {
     const { url } = webViewState
     if (url && url.startsWith(this.props.redirectUrl)) {
-      const match = url.match(/#(.*)/)
-      const results = qs.parse(match[1]);
+      const match = url.match(/(#|\?)(.*)/)
+      const results = qs.parse(match[2])
       this.hide()
       if (results.access_token) {
           // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
