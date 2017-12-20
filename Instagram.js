@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView
 } from 'react-native'
-import parse from 'querystringify';
+import qs from 'qs'
 
 const { width, height } = Dimensions.get('window')
 
@@ -33,7 +33,8 @@ export default class Instagram extends Component {
   _onNavigationStateChange (webViewState) {
     const { url } = webViewState
     if (url && url.startsWith(this.props.redirectUrl)) {
-      const results = parse(url)
+      const match = url.match(/#(.*)/)
+      const results = qs.parse(match[1]);
       this.hide()
       if (results.access_token) {
           // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.

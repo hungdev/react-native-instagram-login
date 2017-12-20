@@ -24,7 +24,5 @@
     "url": "https://github.com/hungdev/react-native-instagram-login/issues"
   },
   "homepage": "https://github.com/hungdev/react-native-instagram-login#readme",
-  "dependencies": {
-    "querystringify": "^1.0.0"
-  }
+  "dependencies": {}
 }
