@@ -26,6 +26,7 @@ import InstagramLogin from 'react-native-instagram-login'
         clientId='xxxxxxxxxx'
         scopes={['public_content', 'follower_list']}
         onLoginSuccess={(token) => this.setState({ token })}
+        onLoginFailure={(data) => console.log(data)}
     />
 </View>
 
