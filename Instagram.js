@@ -37,28 +37,28 @@ export default class Instagram extends Component {
       const results = qs.parse(match[2])
       this.hide()
       if (results.access_token) {
-          // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
-          this.props.onLoginSuccess(results.access_token, results)
+        // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
+        this.props.onLoginSuccess(results.access_token, results)
       } else {
-          this.props.onLoginFailure(results)
+        this.props.onLoginFailure(results)
       }
     }
   }
 
   _onMessage (reactMessage) {
-      try {
-          const json = JSON.parse(reactMessage.nativeEvent.data)
-          if (json && json.error_type) {
-              this.hide()
-              this.props.onLoginFailure(json)
-          }
-      }catch(err) {}
+    try {
+      const json = JSON.parse(reactMessage.nativeEvent.data)
+      if (json && json.error_type) {
+        this.hide()
+        this.props.onLoginFailure(json)
+      }
+    } catch (err) { }
   }
 
-  _onLoadEnd () {
-      const scriptToPostBody = "window.postMessage(document.body.innerText, '*')";
-      this.webView.injectJavaScript(scriptToPostBody);
-  }
+  // _onLoadEnd () {
+  //   const scriptToPostBody = "window.postMessage(document.body.innerText, '*')"
+  //     this.webView.injectJavaScript(scriptToPostBody)
+  // }
 
   render () {
     const { clientId, redirectUrl, scopes } = this.props
@@ -73,15 +73,16 @@ export default class Instagram extends Component {
           <KeyboardAvoidingView behavior='padding' style={[styles.keyboardStyle, this.props.styles.keyboardStyle]}>
             <View style={[styles.contentWarp, this.props.styles.contentWarp]}>
               <WebView
+                {...this.props}
                 style={[styles.webView, this.props.styles.webView]}
                 source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=${scopes.join('+')}` }}
                 scalesPageToFit
                 startInLoadingState
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
                 onError={this._onNavigationStateChange.bind(this)}
-                onLoadEnd={this._onLoadEnd.bind(this)}
+                // onLoadEnd={this._onLoadEnd.bind(this)}
                 onMessage={this._onMessage.bind(this)}
-                ref={(webView) => {this.webView=webView}}
+                ref={(webView) => { this.webView = webView }}
               />
               <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
                 <Image source={require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     height: height - 80
   },
   webView: {
-    flex: 1,
+    flex: 1
   },
   btnStyle: {
     width: 30,

@@ -50,7 +50,7 @@ export default class App extends Component<{}> {
           </View>}
         <Ins
           ref='ins'
-          clientId='c7831304b961485a938674163166e606'
+          clientId='931cca1d0c154de3aafd83300ff8b288'
           redirectUrl='https://google.com'
           scopes={['public_content+follower_list']}
           onLoginSuccess={(token) => this.setState({ token })}
