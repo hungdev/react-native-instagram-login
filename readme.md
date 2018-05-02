@@ -6,7 +6,7 @@
 # Install
 
 ```js
-Run npm install react-native-instagram-login --save
+npm install react-native-instagram-login --save
 ```
 
 * How to get Client ID of instagram?
@@ -41,6 +41,7 @@ scopes | PropTypes.array | Array
 redirectUrl | PropTypes.string | String
 styles | PropTypes.object | Object
 onLoginSuccess | PropTypes.func | Function callback
+onLoginFailure | PropTypes.func | Function callback
 modalVisible | PropTypes.bool | true or false
 
 
