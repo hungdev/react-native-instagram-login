@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignSelf: 'center',
     width: width - 30,
-    height: height - 80
+    height: height - 80,
+    paddingTop: 30
   },
   webView: {
     flex: 1
