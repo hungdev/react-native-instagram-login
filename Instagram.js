@@ -16,6 +16,17 @@ import qs from 'qs'
 
 const { width, height } = Dimensions.get('window')
 
+const patchPostMessageJsCode = `(${String(function () {
+  var originalPostMessage = window.postMessage
+  var patchedPostMessage = function (message, targetOrigin, transfer) {
+    originalPostMessage(message, targetOrigin, transfer)
+  }
+  patchedPostMessage.toString = function () {
+    return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage')
+  }
+  window.postMessage = patchedPostMessage
+})})();`
+
 export default class Instagram extends Component {
   constructor (props) {
     super(props)
@@ -83,6 +94,7 @@ export default class Instagram extends Component {
                 // onLoadEnd={this._onLoadEnd.bind(this)}
                 onMessage={this._onMessage.bind(this)}
                 ref={(webView) => { this.webView = webView }}
+                injectedJavaScript={patchPostMessageJsCode}
               />
               <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
                 <Image source={require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
