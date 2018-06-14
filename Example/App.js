@@ -45,16 +45,21 @@ export default class App extends Component<{}> {
             </View>
           )
         }
-          {this.state.failure && <View>
-            <Text style={{ margin: 10 }}>failure: {JSON.stringify(this.state.failure)}</Text>
-          </View>}
+        {this.state.failure && <View>
+          <Text style={{ margin: 10 }}>failure: {JSON.stringify(this.state.failure)}</Text>
+        </View>}
         <Ins
           ref='ins'
           clientId='931cca1d0c154de3aafd83300ff8b288'
           redirectUrl='https://google.com'
           scopes={['public_content+follower_list']}
           onLoginSuccess={(token) => this.setState({ token })}
-          onLoginFailure={(data)  => this.setState({failure: data})}
+          onLoginFailure={(data) => this.setState({ failure: data })}
+          styles={styles}
+          onBackdropPress
+        // imgCloseButton={{uri: 'https://openclipart.org/image/2400px/svg_to_png/183568/close-button.png'}}
+        // imgCloseButton={require('./close-button.png')}
+        // hideCloseButton
         />
       </View>
     );
@@ -78,4 +83,9 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  // example override style
+  // contentWarp: {
+  //   borderWidth: 1,
+  //   borderColor: 'red'
+  // },
 });

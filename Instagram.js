@@ -71,8 +71,15 @@ export default class Instagram extends Component {
   //     this.webView.injectJavaScript(scriptToPostBody)
   // }
 
+  onBackdropPress () {
+    const { onBackdropPress } = this.props
+    if (onBackdropPress) {
+      this.setState({ modalVisible: false })
+    }
+  }
+
   render () {
-    const { clientId, redirectUrl, scopes } = this.props
+    const { clientId, redirectUrl, scopes, hideCloseButton, imgCloseButton } = this.props
     return (
       <Modal
         animationType={'slide'}
@@ -80,9 +87,9 @@ export default class Instagram extends Component {
         onRequestClose={this.hide.bind(this)}
         transparent
       >
-        <View style={[styles.modalWarp, this.props.styles.modalWarp]}>
+        <TouchableOpacity style={[styles.modalWarp, this.props.styles.modalWarp]} activeOpacity={1} onPress={() => this.onBackdropPress()}>
           <KeyboardAvoidingView behavior='padding' style={[styles.keyboardStyle, this.props.styles.keyboardStyle]}>
-            <View style={[styles.contentWarp, this.props.styles.contentWarp]}>
+            <TouchableOpacity style={[styles.contentWarp, this.props.styles.contentWarp]} activeOpacity={1}>
               <WebView
                 {...this.props}
                 style={[styles.webView, this.props.styles.webView]}
@@ -96,12 +103,14 @@ export default class Instagram extends Component {
                 ref={(webView) => { this.webView = webView }}
                 injectedJavaScript={patchPostMessageJsCode}
               />
-              <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
-                <Image source={require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
-              </TouchableOpacity>
-            </View>
+              {!hideCloseButton ? (
+                <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
+                  <Image source={imgCloseButton || require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
+                </TouchableOpacity>
+              ) : null}
+            </TouchableOpacity>
           </KeyboardAvoidingView>
-        </View>
+        </TouchableOpacity>
 
       </Modal >
 
@@ -115,7 +124,9 @@ const propTypes = {
   scopes: PropTypes.array,
   onLoginSuccess: PropTypes.func,
   modalVisible: PropTypes.bool,
-  onLoginFailure: PropTypes.func
+  onLoginFailure: PropTypes.func,
+  onBackdropPress: PropTypes.bool,
+  hideCloseButton: PropTypes.bool
 }
 
 const defaultProps = {

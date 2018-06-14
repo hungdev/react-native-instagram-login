@@ -43,11 +43,24 @@ styles | PropTypes.object | Object
 onLoginSuccess | PropTypes.func | Function callback
 onLoginFailure | PropTypes.func | Function callback
 modalVisible | PropTypes.bool | true or false
+onBackdropPress | PropTypes.bool | true or false
+hideCloseButton | PropTypes.bool | true or false
+imgCloseButton | | source image close button (look at example)
 
 
 ## Styles
 
 To override default styles, set a custom `styles` prop.
+
+Property | Description
+------------ | -------------
+modalWarp | container style full screen
+keyboardStyle | KeyboardAvoidingView style
+contentWarp | content style
+webView | webView
+btnStyle | warp close button style
+closeStyle | image style close button
+
 
 ```javascript
 <InstagramLogin styles={styles} />
