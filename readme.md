@@ -1,4 +1,7 @@
 # React Native Instagram login
+[![npm version](https://img.shields.io/npm/v/react-native-instagram-login.svg?style=flat)](https://www.npmjs.com/package/react-native-instagram-login)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-instagram-login.svg?style=flat-square)](https://www.npmjs.com/package/react-native-instagram-login)
+
 <p align="center">
   <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/instagram.gif?raw=true" width=200/>
 </p>
