@@ -40,6 +40,7 @@ import InstagramLogin from 'react-native-instagram-login'
 Property | Type | Description
 ------------ | ------------- | -------------
 clientId | PropTypes.string | Instagram App ClientId
+responseType | PropTypes.string | 'code' or 'token', default 'token'
 scopes | PropTypes.array | Array
 redirectUrl | PropTypes.string | String
 styles | PropTypes.object | Object

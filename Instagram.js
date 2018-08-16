@@ -50,7 +50,9 @@ export default class Instagram extends Component {
       if (results.access_token) {
         // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
         this.props.onLoginSuccess(results.access_token, results)
-      } else {
+      } else if(results.code){
+        this.props.onLoginSuccess(results.code, results);
+      }else {
         this.props.onLoginFailure(results)
       }
     }
@@ -79,7 +81,7 @@ export default class Instagram extends Component {
   }
 
   render () {
-    const { clientId, redirectUrl, scopes, hideCloseButton, imgCloseButton } = this.props
+    const { clientId, redirectUrl, scopes, hideCloseButton, imgCloseButton, responseType } = this.props
     return (
       <Modal
         animationType={'slide'}
@@ -93,7 +95,7 @@ export default class Instagram extends Component {
               <WebView
                 {...this.props}
                 style={[styles.webView, this.props.styles.webView]}
-                source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=${scopes.join('+')}` }}
+                source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join('+')}` }}
                 scalesPageToFit
                 startInLoadingState
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
@@ -126,7 +128,8 @@ const propTypes = {
   modalVisible: PropTypes.bool,
   onLoginFailure: PropTypes.func,
   onBackdropPress: PropTypes.bool,
-  hideCloseButton: PropTypes.bool
+  hideCloseButton: PropTypes.bool,
+  responseType: PropTypes.string,
 }
 
 const defaultProps = {
@@ -145,7 +148,8 @@ const defaultProps = {
   },
   onLoginFailure: (failureJson) => {
     console.debug(failureJson)
-  }
+  },
+  responseType: 'token',
 }
 
 Instagram.propTypes = propTypes
