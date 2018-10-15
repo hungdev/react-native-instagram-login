@@ -8,9 +8,6 @@ import {
   Alert,
   Modal,
   Dimensions,
-  Image,
-  TouchableOpacity,
-  KeyboardAvoidingView
 } from 'react-native'
 import qs from 'qs'
 
@@ -81,7 +78,7 @@ export default class Instagram extends Component {
   }
 
   render () {
-    const { clientId, redirectUrl, scopes, hideCloseButton, imgCloseButton, responseType } = this.props
+    const { clientId, redirectUrl, scopes, responseType } = this.props
     return (
       <Modal
         animationType={'slide'}
@@ -89,31 +86,19 @@ export default class Instagram extends Component {
         onRequestClose={this.hide.bind(this)}
         transparent
       >
-        <TouchableOpacity style={[styles.modalWarp, this.props.styles.modalWarp]} activeOpacity={1} onPress={() => this.onBackdropPress()}>
-          <KeyboardAvoidingView behavior='padding' style={[styles.keyboardStyle, this.props.styles.keyboardStyle]}>
-            <TouchableOpacity style={[styles.contentWarp, this.props.styles.contentWarp]} activeOpacity={1}>
-              <WebView
-                {...this.props}
-                style={[styles.webView, this.props.styles.webView]}
-                source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join('+')}` }}
-                scalesPageToFit
-                startInLoadingState
-                onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-                onError={this._onNavigationStateChange.bind(this)}
-                // onLoadEnd={this._onLoadEnd.bind(this)}
-                onMessage={this._onMessage.bind(this)}
-                ref={(webView) => { this.webView = webView }}
-                injectedJavaScript={patchPostMessageJsCode}
-              />
-              {!hideCloseButton ? (
-                <TouchableOpacity onPress={this.hide.bind(this)} style={[styles.btnStyle, this.props.styles.btnStyle]}>
-                  <Image source={imgCloseButton || require('./close.png')} style={[styles.closeStyle, this.props.styles.closeStyle]} />
-                </TouchableOpacity>
-              ) : null}
-            </TouchableOpacity>
-          </KeyboardAvoidingView>
-        </TouchableOpacity>
-
+        <WebView
+          {...this.props}
+          style={[styles.webView, this.props.styles.webView]}
+          source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join('+')}` }}
+          scalesPageToFit
+          startInLoadingState
+          onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+          onError={this._onNavigationStateChange.bind(this)}
+          // onLoadEnd={this._onLoadEnd.bind(this)}
+          onMessage={this._onMessage.bind(this)}
+          ref={(webView) => { this.webView = webView }}
+          injectedJavaScript={patchPostMessageJsCode}
+        />
       </Modal >
 
     )
