@@ -21,11 +21,11 @@ go to https://www.instagram.com/developer/register/ to register instagram app. t
 ```javascript
 import InstagramLogin from 'react-native-instagram-login'
 <View>
-    <TouchableOpacity onPress={()=> this.refs.instagramLogin.show()}>
+    <TouchableOpacity onPress={()=> this.instagramLogin.show()}>
         <Text style={{color: 'white'}}>Login</Text>
     </TouchableOpacity>
     <InstagramLogin
-        ref='instagramLogin'
+        ref= {ref => this.instagramLogin= ref}
         clientId='xxxxxxxxxx'
         scopes={['public_content', 'follower_list']}
         onLoginSuccess={(token) => this.setState({ token })}
