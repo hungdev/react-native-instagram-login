@@ -55,11 +55,6 @@ export default class App extends Component<{}> {
           scopes={['public_content+follower_list']}
           onLoginSuccess={(token) => this.setState({ token })}
           onLoginFailure={(data) => this.setState({ failure: data })}
-          styles={styles}
-          onBackdropPress
-        // imgCloseButton={{uri: 'https://openclipart.org/image/2400px/svg_to_png/183568/close-button.png'}}
-        // imgCloseButton={require('./close-button.png')}
-        // hideCloseButton
         />
       </View>
     );
@@ -83,9 +78,4 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-  // example override style
-  // contentWarp: {
-  //   borderWidth: 1,
-  //   borderColor: 'red'
-  // },
 });

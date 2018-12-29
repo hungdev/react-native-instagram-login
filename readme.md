@@ -3,7 +3,8 @@
 [![npm downloads](https://img.shields.io/npm/dm/react-native-instagram-login.svg?style=flat-square)](https://www.npmjs.com/package/react-native-instagram-login)
 
 <p align="center">
-  <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/instagram.gif?raw=true" width=200/>
+  <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/instagram.gif?raw=true" width=300/>
+  <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/ios.gif?raw=true" width=300/>
 </p>
 
 # Install
@@ -43,38 +44,12 @@ clientId | PropTypes.string | Instagram App ClientId
 responseType | PropTypes.string | 'code' or 'token', default 'token'
 scopes | PropTypes.array | Array
 redirectUrl | PropTypes.string | String
-styles | PropTypes.object | Object
 onLoginSuccess | PropTypes.func | Function callback
 onLoginFailure | PropTypes.func | Function callback
 modalVisible | PropTypes.bool | true or false
-onBackdropPress | PropTypes.bool | true or false
-hideCloseButton | PropTypes.bool | true or false
-imgCloseButton | | source image close button (look at example)
-
-
-## Styles
-
-To override default styles, set a custom `styles` prop.
-
-Property | Description
------------- | -------------
-modalWarp | container style full screen
-keyboardStyle | KeyboardAvoidingView style
-contentWarp | content style
-webView | webView
-btnStyle | warp close button style
-closeStyle | image style close button
-
-
-```javascript
-<InstagramLogin styles={styles} />
-
-const styles = StyleSheet.create({
-  closeStyle: {
-    marginTop: 22,
-  }
-});
-```
+containerStyle | PropTypes.object | Object
+wrapperStyle | PropTypes.object | warp webview
+closeStyle | PropTypes.object | style for close button
 
 
 # Logout
@@ -90,3 +65,6 @@ import Cookie from 'react-native-cookie'
     })
   }
  ```
+ 
+ # Pull request
+  Pull requests are welcome!

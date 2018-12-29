@@ -76,7 +76,7 @@ export default class Instagram extends Component {
     const { renderClose } = this.props
     if (renderClose) return renderClose()
     return (
-      <Image source={require('./assets/close-button.png')} style={styles.imgClose} resizeMode="contain" />
+      <Image source={require('./close-button.png')} style={styles.imgClose} resizeMode="contain" />
     )
   }
 
