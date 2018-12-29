@@ -41,14 +41,16 @@ Property | Type | Description
 ------------ | ------------- | -------------
 clientId | PropTypes.string | Instagram App ClientId
 responseType | PropTypes.string | 'code' or 'token', default 'token'
-scopes | PropTypes.array | Array
-redirectUrl | PropTypes.string | String
-onLoginSuccess | PropTypes.func | Function callback
-onLoginFailure | PropTypes.func | Function callback
+scopes | PropTypes.array | Login Permissions
+redirectUrl | PropTypes.string | Your redirectUrl
+onLoginSuccess | PropTypes.func | Function will be call back on success
+onLoginFailure | PropTypes.func | Function will be call back on error
+onClose | PropTypes.func | Function will be call back on close modal
 modalVisible | PropTypes.bool | true or false
-containerStyle | PropTypes.object | Object
-wrapperStyle | PropTypes.object | warp webview
-closeStyle | PropTypes.object | style for close button
+renderClose | PropTypes.func | Render function for customize close button
+containerStyle | PropTypes.object | Customize container style
+wrapperStyle | PropTypes.object | Customize wrapper style
+closeStyle | PropTypes.object | Customize close style
 
 
 # Logout
