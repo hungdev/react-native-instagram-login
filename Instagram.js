@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 15
   },
   imgClose: {
     width: 30,
