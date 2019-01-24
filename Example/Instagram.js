@@ -29,7 +29,10 @@ const patchPostMessageJsCode = `(${String(function () {
 export default class Instagram extends Component {
   constructor(props) {
     super(props)
-    this.state = { modalVisible: false }
+    this.state = {
+      modalVisible: false,
+      key: 1
+    }
   }
 
   show() {
@@ -42,6 +45,10 @@ export default class Instagram extends Component {
 
   _onNavigationStateChange(webViewState) {
     const { url } = webViewState
+    const { key } = this.state
+    if (webViewState.title === 'Instagram' && webViewState.url === 'https://www.instagram.com/') {
+      this.setState({ key: key + 1 })
+    }
     if (url && url.startsWith(this.props.redirectUrl)) {
       const match = url.match(/(#|\?)(.*)/)
       const results = qs.parse(match[2])
@@ -88,9 +95,11 @@ export default class Instagram extends Component {
 
   renderWebview() {
     const { clientId, redirectUrl, scopes, responseType } = this.props
+    const { key } = this.state
     return (
       <WebView
         {...this.props}
+        key={key}
         style={[styles.webView, this.props.styles.webView]}
         source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join('+')}` }}
         scalesPageToFit
@@ -194,6 +203,7 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 15
   },
   imgClose: {
     width: 30,
