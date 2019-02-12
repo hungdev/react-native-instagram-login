@@ -12,6 +12,10 @@
 npm install react-native-instagram-login --save
 ```
 
+```js
+react-native link react-native-webview
+```
+
 * How to get Client ID of instagram?
 
 go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID
@@ -27,7 +31,7 @@ import InstagramLogin from 'react-native-instagram-login'
     <InstagramLogin
         ref= {ref => this.instagramLogin= ref}
         clientId='xxxxxxxxxx'
- 	redirectUrl='yourRedirectUrl'
+ 	      redirectUrl='yourRedirectUrl'
         scopes={['public_content', 'follower_list']}
         onLoginSuccess={(token) => this.setState({ token })}
         onLoginFailure={(data) => console.log(data)}
@@ -56,15 +60,17 @@ closeStyle | PropTypes.object | Customize close style
 
 # Logout
 
-To logout use clear cookies by using https://github.com/shimohq/react-native-cookie
+To logout use clear cookies by using https://github.com/joeferraro/react-native-cookies
 
 ```js
-import Cookie from 'react-native-cookie'
+import CookieManager from 'react-native-cookies';
 
   logout() {
-    Cookie.clear().then(() => {
-      this.setState({ token: null })
-    })
+    CookieManager.clearAll()
+      .then((res) => {
+        console.log('CookieManager.clearAll =>', res);
+        this.setState({ token: '' })
+      });
   }
  ```
  
