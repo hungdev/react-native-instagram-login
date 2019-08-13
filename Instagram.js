@@ -154,7 +154,7 @@ const propTypes = {
 const defaultProps = {
   redirectUrl: 'https://google.com',
   styles: {},
-  scopes: ['public_content'],
+  scopes: ['basic'],
   onLoginSuccess: (token) => {
     Alert.alert(
       'Alert Title',
