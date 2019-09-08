@@ -60,7 +60,9 @@ import InstagramLogin from 'react-native-instagram-login'
 
 # Logout
 
-To logout use clear cookies by using https://github.com/joeferraro/react-native-cookies
+Currently the react-native-cookies library is not working, so we cannot delete cookies, so temporary the solution is to disable cookies on webview.
+
+~To logout use clear cookies by using https://github.com/joeferraro/react-native-cookies~
 
 ```js
 import CookieManager from 'react-native-cookies';
