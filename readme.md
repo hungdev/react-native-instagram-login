@@ -30,9 +30,9 @@ import InstagramLogin from 'react-native-instagram-login'
     </TouchableOpacity>
     <InstagramLogin
         ref= {ref => this.instagramLogin= ref}
-        clientId='xxxxxxxxxx'
-        redirectUrl='yourRedirectUrl'
-        scopes={['public_content', 'follower_list']}
+        clientId='your-client-ID'
+        redirectUrl='your-redirect-Url'
+        scopes={['basic']}
         onLoginSuccess={(token) => this.setState({ token })}
         onLoginFailure={(data) => console.log(data)}
     />
@@ -42,20 +42,20 @@ import InstagramLogin from 'react-native-instagram-login'
 
 # Props
 
-Property | Type | Description
------------- | ------------- | -------------
-clientId | PropTypes.string | Instagram App ClientId
-responseType | PropTypes.string | 'code' or 'token', default 'token'
-scopes | PropTypes.array | Login Permissions
-redirectUrl | PropTypes.string | Your redirectUrl
-onLoginSuccess | PropTypes.func | Function will be call back on success
-onLoginFailure | PropTypes.func | Function will be call back on error
-onClose | PropTypes.func | Function will be call back on close modal
-modalVisible | PropTypes.bool | true or false
-renderClose | PropTypes.func | Render function for customize close button
-containerStyle | PropTypes.object | Customize container style
-wrapperStyle | PropTypes.object | Customize wrapper style
-closeStyle | PropTypes.object | Customize close style
+| Property       | Type             | Description                                |
+| -------------- | ---------------- | ------------------------------------------ |
+| clientId       | PropTypes.string | Instagram App ClientId                     |
+| responseType   | PropTypes.string | 'code' or 'token', default 'token'         |
+| scopes         | PropTypes.array  | Login Permissions                          |
+| redirectUrl    | PropTypes.string | Your redirectUrl                           |
+| onLoginSuccess | PropTypes.func   | Function will be call back on success      |
+| onLoginFailure | PropTypes.func   | Function will be call back on error        |
+| onClose        | PropTypes.func   | Function will be call back on close modal  |
+| modalVisible   | PropTypes.bool   | true or false                              |
+| renderClose    | PropTypes.func   | Render function for customize close button |
+| containerStyle | PropTypes.object | Customize container style                  |
+| wrapperStyle   | PropTypes.object | Customize wrapper style                    |
+| closeStyle     | PropTypes.object | Customize close style                      |
 
 
 # Logout
