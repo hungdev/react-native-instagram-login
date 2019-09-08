@@ -12,9 +12,28 @@
 npm install react-native-instagram-login --save
 ```
 
+define webview to `dependencies` in `package.json`
+
+```
+"react-native-webview": "^7.0.4"
+```
+
+after that run:
+
 ```js
 react-native link react-native-webview
 ```
+
+for ios:
+
+```js
+cd ios
+```
+
+```js
+pod install
+```
+
 
 * How to get Client ID of instagram?
 

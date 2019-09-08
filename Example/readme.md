@@ -4,7 +4,7 @@ Step:
 npm i
 ```
 
-``
+```
 cd ios
 ```
 
@@ -18,3 +18,8 @@ react-native run-ios
 
 or run `Example.xcworkspace` in ios folder from xcode
 
+with android:
+
+```
+react-native run-android
+```
