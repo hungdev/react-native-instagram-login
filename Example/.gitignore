@@ -21,6 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+package-lock.json
 
 # Android/IntelliJ
 #
@@ -51,3 +52,9 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/

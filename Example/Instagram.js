@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {
   StyleSheet,
   View,
-  WebView,
   Alert,
   Modal,
   Dimensions,
@@ -12,7 +11,7 @@ import {
   Image
 } from 'react-native'
 import qs from 'qs'
-
+import { WebView } from "react-native-webview";
 const { width, height } = Dimensions.get('window')
 
 const patchPostMessageJsCode = `(${String(function () {
@@ -83,7 +82,7 @@ export default class Instagram extends Component {
     const { renderClose } = this.props
     if (renderClose) return renderClose()
     return (
-      <Image source={require('./close-button.png')} style={styles.imgClose} resizeMode="contain" />
+      <Image source={require('./assets/close-button.png')} style={styles.imgClose} resizeMode="contain" />
     )
   }
 
@@ -102,7 +101,7 @@ export default class Instagram extends Component {
         key={key}
         style={[styles.webView, this.props.styles.webView]}
         source={{ uri: `https://api.instagram.com/oauth/authorize/?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join('+')}` }}
-        scalesPageToFit
+        // scalesPageToFit
         startInLoadingState
         onNavigationStateChange={this._onNavigationStateChange.bind(this)}
         onError={this._onNavigationStateChange.bind(this)}
@@ -155,7 +154,7 @@ const propTypes = {
 const defaultProps = {
   redirectUrl: 'https://google.com',
   styles: {},
-  scopes: ['public_content'],
+  scopes: ['basic'],
   onLoginSuccess: (token) => {
     Alert.alert(
       'Alert Title',
