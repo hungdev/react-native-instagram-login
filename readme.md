@@ -35,7 +35,7 @@ pod install
 ```
 
 
-* How to get Client ID of instagram?
+* How to get Client ID of instagram (DEPRECATED)?
 
 ~go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID~
 
