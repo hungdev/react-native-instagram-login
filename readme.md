@@ -37,7 +37,12 @@ pod install
 
 * How to get Client ID of instagram?
 
-go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID
+~go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID~
+
+Go to https://developers.facebook.com/docs/instagram-api/getting-started to register new app, and get app_id and app_secret.
+
+This is going to give you an access_token, which one can be used on the new Graph Api, go to https://developers.facebook.com/docs/instagram-basic-display-api/guides/getting-profiles-and-media for docs. 
+
 
 # Usage:
 
@@ -49,7 +54,8 @@ import InstagramLogin from 'react-native-instagram-login'
     </TouchableOpacity>
     <InstagramLogin
         ref= {ref => this.instagramLogin= ref}
-        clientId='your-client-ID'
+        appId='your-app-id'
+        appSecret='your-app-secret'
         redirectUrl='your-redirect-Url'
         scopes={['basic']}
         onLoginSuccess={(token) => this.setState({ token })}
