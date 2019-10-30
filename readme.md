@@ -47,21 +47,32 @@ This is going to give you an access_token, which one can be used on the new Grap
 # Usage:
 
 ```javascript
+
+
+
 import InstagramLogin from 'react-native-instagram-login'
+import store from 'react-native-simple-store'
 <View>
     <TouchableOpacity onPress={()=> this.instagramLogin.show()}>
         <Text style={{color: 'white'}}>Login</Text>
     </TouchableOpacity>
     <InstagramLogin
-        ref= {ref => this.instagramLogin= ref}
+        ref='instagramLogin'
         appId='your-app-id'
         appSecret='your-app-secret'
         redirectUrl='your-redirect-Url'
-        scopes={['basic']}
-        onLoginSuccess={(token) => this.setState({ token })}
+        scopes={['user_profile', 'user_media']}
+        onLoginSuccess={ this.setIgToken }
         onLoginFailure={(data) => console.log(data)}
     />
 </View>
+
+setIgToken = async (data) =>{
+    await store.save('igToken', data.access_token)
+    await store.save('igUserId', data.user_id)
+    this.setState({ igToken: data.access_token, igUserId: data.user_id})
+  }
+
 
 ```
 
@@ -69,7 +80,8 @@ import InstagramLogin from 'react-native-instagram-login'
 
 | Property       | Type             | Description                                |
 | -------------- | ---------------- | ------------------------------------------ |
-| clientId       | PropTypes.string | Instagram App ClientId                     |
+| appId          | PropTypes.string | Instagram App_id                           |
+| appSecret      | PropTypes.string | Instagram App_secret                       |
 | responseType   | PropTypes.string | 'code' or 'token', default 'token'         |
 | scopes         | PropTypes.array  | Login Permissions                          |
 | redirectUrl    | PropTypes.string | Your redirectUrl                           |
