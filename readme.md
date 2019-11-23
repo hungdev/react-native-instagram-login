@@ -6,7 +6,13 @@
   <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/ios.gif?raw=true" width=300/>
 </p>
 
-# Install
+
+### IMPORTANT NOTES:
+`react-native-instagram-login` version 2 switches to the Instagram Graph API.
+
+If you want to use old version 1, [please read docs](https://github.com/hungdev/react-native-instagram-login/tree/v1)
+
+## Install
 
 ```js
 npm install react-native-instagram-login react-native-webview --save
@@ -28,7 +34,6 @@ cd ios
 pod install
 ```
 
-
 * How to get `appId`, `appSecret` of instagram?
 
 Simple set up
@@ -38,7 +43,7 @@ Go to https://developers.facebook.com/docs/instagram-basic-display-api/getting-s
 This is going to give you an access_token, which one can be used on the new Graph Api, go to https://developers.facebook.com/docs/instagram-basic-display-api/guides/getting-profiles-and-media for docs. 
 
 
-# Usage:
+## Usage:
 
 
 ```javascript
@@ -68,7 +73,7 @@ setIgToken = async (data) => {
 ```
 
 
-# Props
+## Props
 
 | Property       | Type             | Description                                |
 | -------------- | ---------------- | ------------------------------------------ |
@@ -87,7 +92,7 @@ setIgToken = async (data) => {
 | closeStyle     | PropTypes.object | Customize close style                      |
 
 
-# Logout
+## Logout
 
 Currently the react-native-cookies library is not working, so we cannot delete cookies, so temporary the solution is to disable cookies on webview.
 [See more](https://github.com/hungdev/react-native-instagram-login/issues/37#issuecomment-504268747)
@@ -105,6 +110,6 @@ import CookieManager from 'react-native-cookies';
       });
   }
  ```
- 
- # Pull request
+
+ ## Pull request
   Pull requests are welcome!
