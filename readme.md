@@ -118,5 +118,6 @@ import CookieManager from 'react-native-cookies';
   Special thanks [@AlbertoIHP](https://github.com/AlbertoIHP) for v2.
 
   This project exists thanks to all the people who contribute. [[Contribute]]([CONTRIBUTING.md](https://github.com/hungdev/react-native-instagram-login/graphs/contributors)).
+
  ## Pull request
   Pull requests are welcome!
