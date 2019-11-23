@@ -36,9 +36,13 @@ pod install
 
 * How to get `appId`, `appSecret` of instagram?
 
-Simple set up
+> [Simple setup](https://developers.facebook.com/docs/instagram-basic-display-api/getting-started), you only need to complete step 3.
 
-Go to https://developers.facebook.com/docs/instagram-basic-display-api/getting-started to read guide to register new app, and get app_id and app_secret.
+> Then go to Instagram> Basic Display> Instagram App ID field
+
+<p align="center">
+  <img src="./assets/img-appid.png" width='100%'/>
+</p>
 
 This is going to give you an access_token, which one can be used on the new Graph Api, go to https://developers.facebook.com/docs/instagram-basic-display-api/guides/getting-profiles-and-media for docs. 
 
