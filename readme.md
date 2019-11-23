@@ -9,16 +9,10 @@
 # Install
 
 ```js
-npm install react-native-instagram-login --save
+npm install react-native-instagram-login react-native-webview --save
 ```
 
-define webview to `dependencies` in `package.json`
-
-```
-"react-native-webview": "^7.0.4"
-```
-
-after that run:
+After that run:
 
 ```js
 react-native link react-native-webview
@@ -35,20 +29,19 @@ pod install
 ```
 
 
-* How to get Client ID of instagram (DEPRECATED)?
+* How to get `appId`, `appSecret` of instagram?
 
-~go to https://www.instagram.com/developer/register/ to register instagram app. then get client ID~
+Simple set up
 
-Go to https://developers.facebook.com/docs/instagram-api/getting-started to register new app, and get app_id and app_secret.
+Go to https://developers.facebook.com/docs/instagram-basic-display-api/getting-started to read guide to register new app, and get app_id and app_secret.
 
 This is going to give you an access_token, which one can be used on the new Graph Api, go to https://developers.facebook.com/docs/instagram-basic-display-api/guides/getting-profiles-and-media for docs. 
 
 
 # Usage:
 
+
 ```javascript
-
-
 
 import InstagramLogin from 'react-native-instagram-login'
 import store from 'react-native-simple-store'
@@ -67,14 +60,13 @@ import store from 'react-native-simple-store'
     />
 </View>
 
-setIgToken = async (data) =>{
+setIgToken = async (data) => {
     await store.save('igToken', data.access_token)
     await store.save('igUserId', data.user_id)
     this.setState({ igToken: data.access_token, igUserId: data.user_id})
-  }
-
-
+}
 ```
+
 
 # Props
 
