@@ -50,7 +50,7 @@ import store from 'react-native-simple-store'
         <Text style={{color: 'white'}}>Login</Text>
     </TouchableOpacity>
     <InstagramLogin
-        ref='instagramLogin'
+        ref={ref => (this.instagramLogin = ref)}
         appId='your-app-id'
         appSecret='your-app-secret'
         redirectUrl='your-redirect-Url'
