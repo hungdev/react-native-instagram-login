@@ -9,7 +9,7 @@
 # Install
 
 ```js
-npm install react-native-instagram-login --save
+npm install react-native-instagram-login@1.1.2 --save
 ```
 
 define webview to `dependencies` in `package.json`
