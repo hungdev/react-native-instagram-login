@@ -65,7 +65,7 @@ export default class Instagram extends Component {
         const { appId, appSecret, redirectUrl, responseType } = this.props
         if (responseType === 'code') {
           if (code) {
-            this.props.onLoginSuccess(res.data, results);
+            this.props.onLoginSuccess(code, results);
           } else {
             this.props.onLoginFailure(results)
           }
