@@ -114,7 +114,8 @@ export default class Instagram extends Component {
   onClose() {
     const { onClose } = this.props
     if (onClose) onClose()
-    this.setState({ modalVisible: false })
+    // Reuse hide state update logic
+    this.hide()
   }
 
   renderWebview() {
@@ -146,11 +147,14 @@ export default class Instagram extends Component {
 
   render() {
     const { wrapperStyle, containerStyle, closeStyle } = this.props
+    
+    // Bind onClose to onRequestClose callback rather than hide to ensure that the (optional) 
+    // onClose callback provided by client is called when dialog is dismissed
     return (
       <Modal
         animationType={'slide'}
         visible={this.state.modalVisible}
-        onRequestClose={this.hide.bind(this)}
+        onRequestClose={this.onClose.bind(this)}
         transparent
       >
         <View style={[styles.container, containerStyle]}>
