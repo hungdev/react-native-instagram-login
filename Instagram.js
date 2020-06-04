@@ -50,6 +50,7 @@ export default class Instagram extends Component {
       this.setState({ key: key + 1 })
     }
     if (url && url.startsWith(this.props.redirectUrl)) {
+      this.webView.stopLoading();
       const match = url.match(/(#|\?)(.*)/)
       const results = qs.parse(match[2])
       this.hide()
@@ -61,24 +62,32 @@ export default class Instagram extends Component {
         //Fetching to get token with appId, appSecret and code
         let { code } = results
         code = code.split('#_').join('')
-        const { appId, appSecret, redirectUrl, scopes } = this.props
-        let headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
-        let http = axios.create({ baseURL: 'https://api.instagram.com/oauth/access_token',  headers: headers  })
-        let form = new FormData();
-        form.append( 'app_id', appId );
-        form.append( 'app_secret', appSecret );
-        form.append( 'grant_type', 'authorization_code' );
-        form.append( 'redirect_uri', redirectUrl );
-        form.append( 'code', code );
-        let res = await http.post( '/', form ).catch( (error) => { console.log( error.response ); return false })
+        const { appId, appSecret, redirectUrl, responseType } = this.props
+        if (responseType === 'code') {
+          if (code) {
+            this.props.onLoginSuccess(code, results);
+          } else {
+            this.props.onLoginFailure(results)
+          }
+        } else {
+          let headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+          let http = axios.create({ baseURL: 'https://api.instagram.com/oauth/access_token',  headers: headers  })
+          let form = new FormData();
+          form.append( 'app_id', appId );
+          form.append( 'app_secret', appSecret );
+          form.append( 'grant_type', 'authorization_code' );
+          form.append( 'redirect_uri', redirectUrl );
+          form.append( 'code', code );
+          let res = await http.post( '/', form ).catch( (error) => { console.log( error.response ); return false })
 
-        if( res )
-        {
-          this.props.onLoginSuccess(res.data, results);
-        }
-        else
-        {
-          this.props.onLoginFailure(results)
+          if( res )
+          {
+            this.props.onLoginSuccess(res.data, results);
+          }
+          else
+          {
+            this.props.onLoginFailure(results)
+          }
         }
 
 
