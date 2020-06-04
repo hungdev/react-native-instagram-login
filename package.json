@@ -1,6 +1,6 @@
 {
   "name": "react-native-instagram-login",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "React Native Instagram Login, a simple Instagram login library for React Native",
   "main": "Instagram.js",
   "directories": {
@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/hungdev/react-native-instagram-login#readme",
   "dependencies": {
-    "qs": "6.6.0",
-    "react-native-webview": "^7.5.1",
-    "axios": "^0.19.0"
+    "qs": "6.9.4",
+    "react-native-webview": "^10.2.3",
+    "axios": "^0.19.2"
   }
 }

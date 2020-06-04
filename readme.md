@@ -18,23 +18,23 @@ If you want to use old version 1, [please read docs](https://github.com/hungdev/
 npm install react-native-instagram-login react-native-webview --save
 ```
 
-After that run:
+Then link the native iOS package: 
 
 ```js
-react-native link react-native-webview
+npx pod-install
 ```
 
-for ios:
+### Setup (React Native < 0.60.0):
 
-```js
-cd ios
+### Automatic (recommended)
+
+```
+react-native link
 ```
 
-```js
-pod install
-```
+with manual, [see more](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md)
 
-* How to get `appId`, `appSecret` of instagram?
+## How to get `appId`, `appSecret` of instagram?
 
 > [Simple setup](https://developers.facebook.com/docs/instagram-basic-display-api/getting-started), you only need to complete step 3.
 
@@ -51,63 +51,108 @@ This is going to give you an access_token, which one can be used on the new Grap
 
 
 ```javascript
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import InstagramLogin from 'react-native-instagram-login';
+import CookieManager from '@react-native-community/cookies';
 
-import InstagramLogin from 'react-native-instagram-login'
-import store from 'react-native-simple-store'
-<View>
-    <TouchableOpacity onPress={()=> this.instagramLogin.show()}>
-        <Text style={{color: 'white'}}>Login</Text>
-    </TouchableOpacity>
-    <InstagramLogin
-        ref={ref => (this.instagramLogin = ref)}
-        appId='your-app-id'
-        appSecret='your-app-secret'
-        redirectUrl='your-redirect-Url'
-        scopes={['user_profile', 'user_media']}
-        onLoginSuccess={ this.setIgToken }
-        onLoginFailure={(data) => console.log(data)}
-    />
-</View>
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: '',
+    };
+  }
 
-setIgToken = async (data) => {
-    await store.save('igToken', data.access_token)
-    await store.save('igUserId', data.user_id)
-    this.setState({ igToken: data.access_token, igUserId: data.user_id})
+  setIgToken = (data) => {
+    this.setState({ token: data })
+  }
+
+  onClear() {
+    CookieManager.clearAll(true)
+      .then((res) => {
+        this.setState({ token: null })
+      });
+  }
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => this.instagramLogin.show()}>
+          <Text style={{ color: 'white', textAlign: 'center' }}>Login now</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.btn, { marginTop: 10, backgroundColor: 'green' }]}
+          onPress={() => this.onClear()}>
+          <Text style={{ color: 'white', textAlign: 'center' }}>Logout</Text>
+        </TouchableOpacity>
+        <Text style={{ margin: 10 }}>Token: {this.state.token}</Text>
+        {this.state.failure && (
+          <View>
+            <Text style={{ margin: 10 }}>
+              failure: {JSON.stringify(this.state.failure)}
+            </Text>
+          </View>
+        )}
+        <InstagramLogin
+          ref={ref => (this.instagramLogin = ref)}
+          appId='your-app-id'
+          appSecret='your-app-secret'
+          redirectUrl='your-redirect-Url'
+          scopes={['user_profile', 'user_media']}
+          onLoginSuccess={this.setIgToken}
+          onLoginFailure={(data) => console.log(data)}
+        />
+      </View>
+    );
+  }
 }
+
+
+const styles = StyleSheet.create({
+  btn: {
+    borderRadius: 5,
+    backgroundColor: 'orange',
+    height: 30,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+});
+
+
 ```
 
 
 ## Props
 
-| Property       | Type             | Description                                |
-| -------------- | ---------------- | ------------------------------------------ |
-| appId          | PropTypes.string | Instagram App_id                           |
-| appSecret      | PropTypes.string | Instagram App_secret                       |
-| responseType   | PropTypes.string | 'code' or 'token', default 'token'         |
-| scopes         | PropTypes.array  | Login Permissions                          |
-| redirectUrl    | PropTypes.string | Your redirectUrl                           |
-| onLoginSuccess | PropTypes.func   | Function will be call back on success      |
-| onLoginFailure | PropTypes.func   | Function will be call back on error        |
-| onClose        | PropTypes.func   | Function will be call back on close modal  |
-| modalVisible   | PropTypes.bool   | true or false                              |
-| renderClose    | PropTypes.func   | Render function for customize close button |
-| containerStyle | PropTypes.object | Customize container style                  |
-| wrapperStyle   | PropTypes.object | Customize wrapper style                    |
-| closeStyle     | PropTypes.object | Customize close style                      |
+| Property       | Type             | Description                                               |
+| -------------- | ---------------- | --------------------------------------------------------- |
+| appId          | PropTypes.string | Instagram App_id                                          |
+| appSecret      | PropTypes.string | Instagram App_secret                                      |
+| responseType   | PropTypes.string | 'code' or 'token', default 'code'                         |
+| scopes         | PropTypes.array  | Login Permissions, default ['user_profile', 'user_media'] |
+| redirectUrl    | PropTypes.string | Your redirectUrl                                          |
+| onLoginSuccess | PropTypes.func   | Function will be call back on success                     |
+| onLoginFailure | PropTypes.func   | Function will be call back on error                       |
+| onClose        | PropTypes.func   | Function will be call back on close modal                 |
+| modalVisible   | PropTypes.bool   | true or false                                             |
+| renderClose    | PropTypes.func   | Render function for customize close button                |
+| containerStyle | PropTypes.object | Customize container style                                 |
+| wrapperStyle   | PropTypes.object | Customize wrapper style                                   |
+| closeStyle     | PropTypes.object | Customize close style                                     |
 
 
 ## Logout
 
-Currently the react-native-cookies library is not working, so we cannot delete cookies, so temporary the solution is to disable cookies on webview.
-[See more](https://github.com/hungdev/react-native-instagram-login/issues/37#issuecomment-504268747)
-
-~To logout use clear cookies by using https://github.com/joeferraro/react-native-cookies~
+~To logout use clear cookies by using https://github.com/react-native-community/cookies
 
 ```js
-import CookieManager from 'react-native-cookies';
+import CookieManager from '@react-native-community/cookies';
 
   logout() {
-    CookieManager.clearAll()
+    CookieManager.clearAll(true)
       .then((res) => {
         console.log('CookieManager.clearAll =>', res);
         this.setState({ token: '' })
