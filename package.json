@@ -1,6 +1,6 @@
 {
   "name": "react-native-instagram-login",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "React Native Instagram Login, a simple Instagram login library for React Native",
   "main": "Instagram.js",
   "directories": {
