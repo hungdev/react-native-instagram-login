@@ -61,7 +61,7 @@ export default class Instagram extends Component {
         let { code } = results;
         code = code.split('#_').join('');
         const { appId, appSecret, redirectUrl, responseType } = this.props;
-        if (responseType === 'code') {
+        if (responseType === 'code' && !appSecret) {
           if (code) {
             this.props.onLoginSuccess(code, results);
           } else {
@@ -138,7 +138,7 @@ export default class Instagram extends Component {
     const { appId, appSecret, redirectUrl, scopes, responseType } = this.props;
     const { key } = this.state;
 
-    let ig_uri = `https://api.instagram.com/oauth/authorize/?app_id=${appId}&app_secret=${appSecret}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
+    let ig_uri = `https://api.instagram.com/oauth/authorize/?app_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
 
     return (
       <WebView
@@ -209,7 +209,7 @@ const defaultProps = {
   onLoginFailure: (failureJson) => {
     console.debug(failureJson);
   },
-  responseType: 'code',
+  responseType: 'code'
 };
 
 Instagram.propTypes = propTypes;
