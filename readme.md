@@ -153,7 +153,7 @@ app_id: your-app-id
 app_secret: your-app-secret
 grant_type: 'authorization_code'
 redirect_uri: your-redirect-url
-code: code get from onLoginSuccess props
+code: code-get-from-onLoginSuccess-props
 ```
 
 [For example](https://github.com/hungdev/react-native-instagram-login/blob/master/Instagram.js#L71-L88)
