@@ -65,7 +65,8 @@ export default class App extends Component {
   }
 
   setIgToken = (data) => {
-    this.setState({ token: data })
+    console.log('data', data)
+    this.setState({ token: data.access_token })
   }
 
   onClear() {
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
 
 ```
 
-
 ## Props
 
 | Property       | Type             | Description                                               |
@@ -142,6 +142,30 @@ const styles = StyleSheet.create({
 | containerStyle | PropTypes.object | Customize container style                                 |
 | wrapperStyle   | PropTypes.object | Customize wrapper style                                   |
 | closeStyle     | PropTypes.object | Customize close style                                     |
+
+## Server side explicit: [Discuss here](https://github.com/hungdev/react-native-instagram-login/issues/54)
+If you dont want to expose `appSecret` on the client, you dont need to pass `appSecret` props in client. And `onLoginSuccess` will callback a `code`.
+
+On your server (Backend) you have to call an api `https://api.instagram.com/oauth/access_token` with method `post` to exchange the code for a token, and params:
+
+```
+app_id: your-app-id
+app_secret: your-app-secret
+grant_type: 'authorization_code'
+redirect_uri: your-redirect-url
+code: code get from onLoginSuccess props
+```
+
+[For example](https://github.com/hungdev/react-native-instagram-login/blob/master/Instagram.js#L71-L88)
+
+The response will look like this:
+
+```
+{
+  "access_token": "IGQVJ...",
+  "user_id": 17841405793187218
+}
+```
 
 
 ## Logout
