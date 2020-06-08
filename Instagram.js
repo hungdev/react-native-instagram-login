@@ -185,7 +185,7 @@ export default class Instagram extends Component {
 }
 const propTypes = {
   appId: PropTypes.string.isRequired,
-  appSecret: PropTypes.string.isRequired,
+  appSecret: PropTypes.string,
   redirectUrl: PropTypes.string,
   scopes: PropTypes.array,
   onLoginSuccess: PropTypes.func,
