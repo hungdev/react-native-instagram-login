@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
 
 | Property       | Type             | Description                                               |
 | -------------- | ---------------- | --------------------------------------------------------- |
-| appId          | PropTypes.string | Instagram App_id                                          |
-| appSecret      | PropTypes.string | Instagram App_secret                                      |
+| appId          | PropTypes.string | Instagram client_id                                       |
+| appSecret      | PropTypes.string | Instagram client_secret                                   |
 | responseType   | PropTypes.string | 'code' or 'token', default 'code'                         |
 | scopes         | PropTypes.array  | Login Permissions, default ['user_profile', 'user_media'] |
 | redirectUrl    | PropTypes.string | Your redirectUrl                                          |
@@ -144,13 +144,13 @@ const styles = StyleSheet.create({
 | closeStyle     | PropTypes.object | Customize close style                                     |
 
 ## Server side explicit: [Discuss here](https://github.com/hungdev/react-native-instagram-login/issues/54)
-If you dont want to expose `appSecret` on the client, you dont need to pass `appSecret` props in client. And `onLoginSuccess` will callback a `code`.
+If you dont want to expose `appSecret` on the client, you dont need to pass `appSecret` props on client. And `onLoginSuccess` will callback a `code`.
 
 On your server (Backend) you have to call an api `https://api.instagram.com/oauth/access_token` with method `post` to exchange the code for a token, and params:
 
 ```
-app_id: your-app-id
-app_secret: your-app-secret
+client_id: your-app-id
+client_secret: your-app-secret
 grant_type: 'authorization_code'
 redirect_uri: your-redirect-url
 code: code-get-from-onLoginSuccess-props
@@ -170,7 +170,7 @@ The response will look like this:
 
 ## Logout
 
-~To logout use clear cookies by using https://github.com/react-native-community/cookies
+To logout use clear cookies by using https://github.com/react-native-community/cookies
 
 ```js
 import CookieManager from '@react-native-community/cookies';
