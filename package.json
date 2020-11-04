@@ -23,7 +23,7 @@
     "auth"
   ],
   "author": "hung vu",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/hungdev/react-native-instagram-login/issues"
   },
