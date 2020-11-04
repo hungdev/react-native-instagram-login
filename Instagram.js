@@ -74,8 +74,8 @@ export default class Instagram extends Component {
             headers: headers,
           });
           let form = new FormData();
-          form.append('app_id', appId);
-          form.append('app_secret', appSecret);
+          form.append('client_id', appId);
+          form.append('client_secret', appSecret);
           form.append('grant_type', 'authorization_code');
           form.append('redirect_uri', redirectUrl);
           form.append('code', code);
