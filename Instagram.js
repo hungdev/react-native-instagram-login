@@ -138,7 +138,7 @@ export default class Instagram extends Component {
     const { appId, appSecret, redirectUrl, scopes, responseType } = this.props;
     const { key } = this.state;
 
-    let ig_uri = `https://api.instagram.com/oauth/authorize/?app_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
+    let ig_uri = `https://api.instagram.com/oauth/authorize/?client_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
 
     return (
       <WebView
