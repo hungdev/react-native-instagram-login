@@ -36,7 +36,7 @@ with manual, [see more](https://github.com/react-native-community/react-native-w
 
 ## How to get `appId`, `appSecret` of instagram?
 
-> [Simple setup](https://developers.facebook.com/docs/instagram-basic-display-api/getting-started), you only need to complete step 3.
+> [Simple setup](https://developers.facebook.com/docs/instagram-basic-display-api/getting-started), You only need to complete the first 3 steps.
 
 > Then go to Instagram> Basic Display> Instagram App ID field
 
