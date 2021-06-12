@@ -12,6 +12,8 @@
 
 If you want to use old version 1, [please read docs](https://github.com/hungdev/react-native-instagram-login/tree/v1)
 
+## [Here is a video tutorial](https://www.youtube.com/watch?v=Xw-mCiyUMgE)
+
 ## Install
 
 ```js
