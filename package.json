@@ -30,7 +30,9 @@
   "homepage": "https://github.com/hungdev/react-native-instagram-login#readme",
   "dependencies": {
     "qs": "6.9.4",
-    "react-native-webview": "^10.9.3",
     "axios": "^0.19.2"
+  },
+  "peerDependencies":{
+    "react-native-webview": "^11.6.2"
   }
 }
