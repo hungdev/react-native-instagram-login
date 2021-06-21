@@ -34,5 +34,6 @@
   },
   "peerDependencies":{
     "react-native-webview": "^11.6.2"
+
   }
 }
