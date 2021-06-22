@@ -33,6 +33,7 @@
     "axios": "^0.19.2"
   },
   "peerDependencies":{
-    "react-native-webview": "^11.2.3"
+    "react-native-webview": "^11.6.2"
+
   }
 }
