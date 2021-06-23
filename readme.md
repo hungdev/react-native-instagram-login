@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
 | containerStyle | PropTypes.object | Customize container style                                 |
 | wrapperStyle   | PropTypes.object | Customize wrapper style                                   |
 | closeStyle     | PropTypes.object | Customize close style                                     |
+| language       | PropTypes.string | Override language of modal,alpha-2 eg:"es","tr" etc.      |
 
 ## Server side explicit: [Discuss here](https://github.com/hungdev/react-native-instagram-login/issues/54)
 If you dont want to expose `appSecret` on the client, you dont need to pass `appSecret` props on client. And `onLoginSuccess` will callback a `code`.
