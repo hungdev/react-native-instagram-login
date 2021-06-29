@@ -106,6 +106,7 @@ export default class App extends Component {
           scopes={['user_profile', 'user_media']}
           onLoginSuccess={this.setIgToken}
           onLoginFailure={(data) => console.log(data)}
+          language='tr' //default is 'en' for english
         />
       </View>
     );
