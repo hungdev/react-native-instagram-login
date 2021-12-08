@@ -135,7 +135,7 @@ export default class Instagram extends Component {
   }
 
   renderWebview() {
-    const { appId, appSecret, redirectUrl, scopes, responseType,language='en' } = this.props;
+    const { appId, appSecret, redirectUrl, scopes, responseType,language='en', incognito=false } = this.props;
     const { key } = this.state;
 
     let ig_uri = `https://api.instagram.com/oauth/authorize/?client_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
@@ -144,6 +144,7 @@ export default class Instagram extends Component {
       <WebView
         {...this.props}
         key={key}
+        incognito={incognito}
         style={[styles.webView, this.props.styles.webView]}
         source={{ uri: ig_uri,headers: {
           "Accept-Language": `${language}`,
