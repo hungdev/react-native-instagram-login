@@ -103,6 +103,7 @@ export default class App extends Component {
           appId='your-app-id'
           appSecret='your-app-secret'
           redirectUrl='your-redirect-Url'
+          incognito={false}
           scopes={['user_profile', 'user_media']}
           onLoginSuccess={this.setIgToken}
           onLoginFailure={(data) => console.log(data)}
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
 | responseType   | PropTypes.string | 'code' or 'token', default 'code'                         |
 | scopes         | PropTypes.array  | Login Permissions, default ['user_profile', 'user_media'] |
 | redirectUrl    | PropTypes.string | Your redirectUrl                                          |
+| incognito      | PropTypes.boolean| Incognito true/false                                      |
 | onLoginSuccess | PropTypes.func   | Function will be call back on success                     |
 | onLoginFailure | PropTypes.func   | Function will be call back on error                       |
 | onClose        | PropTypes.func   | Function will be call back on close modal                 |
