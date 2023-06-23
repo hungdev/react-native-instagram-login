@@ -72,6 +72,7 @@ export default class Instagram extends Component {
           let http = axios.create({
             baseURL: 'https://api.instagram.com/oauth/access_token',
             headers: headers,
+            withCredentials: false,
           });
           let form = new FormData();
           form.append('client_id', appId);
