@@ -82,7 +82,7 @@ export default function App() {
         onPress={onClear}>
         <Text style={{ color: 'white', textAlign: 'center' }}>Logout</Text>
       </TouchableOpacity>
-      <Text style={{ margin: 10 }}>Token: {token}</Text>
+      <Text style={{ margin: 10 }}>Token: {token?.access_token}</Text>
       <InstagramLogin
         ref={insRef}
         appId='your-app-id'
