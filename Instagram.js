@@ -73,29 +73,33 @@ export default class Instagram extends Component {
     const cleanedCode = code.split('#_').join('');
 
     if (responseType === 'code' && !appSecret) {
-      if (cleanedCode) {
-        this.props.onLoginSuccess(cleanedCode);
-      } else {
-        this.props.onLoginFailure({});
-      }
+        if (cleanedCode) {
+            this.props.onLoginSuccess(cleanedCode);
+        } else {
+            this.props.onLoginFailure({});
+        }
     } else {
-      // Make a request to get the access token
-      try {
-        const res = await axios.post('https://api.instagram.com/oauth/access_token', new URLSearchParams({
-          client_id: appId,
-          client_secret: appSecret,
-          grant_type: 'authorization_code',
-          redirect_uri: redirectUrl,
-          code: cleanedCode,
-        }));
+        // Make a request to get the access token
+        try {
+            const res = await axios.post('https://api.instagram.com/oauth/access_token', 
+            new URLSearchParams({
+                client_id: appId,
+                client_secret: appSecret,
+                grant_type: 'authorization_code',
+                redirect_uri: redirectUrl,
+                code: cleanedCode,
+            }), 
+            {
+                withCredentials: false, // Disable cookie handling
+            });
 
-        this.props.onLoginSuccess(res.data);
-      } catch (error) {
-        console.error(error.response || error.message);
-        this.props.onLoginFailure({});
-      }
+            this.props.onLoginSuccess(res.data);
+        } catch (error) {
+            console.error(error.response || error.message);
+            this.props.onLoginFailure({});
+        }
     }
-  }
+}
 
   onMessage(reactMessage) {
     try {
