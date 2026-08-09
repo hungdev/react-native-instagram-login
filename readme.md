@@ -1,256 +1,67 @@
-# React Native Instagram login
-[![npm version](https://img.shields.io/npm/v/react-native-instagram-login.svg?style=flat)](https://www.npmjs.com/package/react-native-instagram-login)
-[![npm downloads](https://img.shields.io/npm/dm/react-native-instagram-login.svg?style=flat-square)](https://www.npmjs.com/package/react-native-instagram-login)
+<div align="center">
 
-<p align="center">
-  <img src="https://github.com/hungdev/react-native-instagram-login/blob/master/ios.gif?raw=true" width=300/>
-</p>
+# react-native-instagram-login
 
+### Login de Instagram para React Native, en un componente
 
-### IMPORTANT NOTES:
-`react-native-instagram-login` version 2 switches to the Instagram Graph API.
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) ![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby&logoColor=white) ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white)
 
-If you want to use old version 1, [please read docs](https://github.com/hungdev/react-native-instagram-login/tree/v1)
+[**🌐 Ver en vivo**](https://www.npmjs.com/package/react-native-instagram-login) · [**📦 Repositorio**](https://github.com/Harkor421/react-native-instagram-login)
 
-## [Here is a video tutorial](https://www.youtube.com/watch?v=Xw-mCiyUMgE)
+</div>
 
-## Install
+---
 
-```js
-npm install react-native-instagram-login react-native-webview --save
-```
+## 📖 Sobre el proyecto
 
-Then link the native iOS package: 
+Componente de React Native que resuelve el login de Instagram en iOS y Android. Fork del paquete publicado en npm, con proyecto de ejemplo incluido.
 
-```js
-npx pod-install
-```
+## ✨ Qué hace
 
-### Setup (React Native < 0.60.0):
+- Un componente y listo: soporta iOS y Android
+- Proyecto de ejemplo completo en `Example/`
+- Sólo axios y qs como dependencias
+- Publicado en npm
 
-### Automatic (recommended)
+## 🧰 Stack
 
-```
-react-native link
-```
+| | |
+|---|---|
+| **Lenguajes y runtime** | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) ![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby&logoColor=white) |
+| **Móvil y escritorio** | ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white) |
 
-with manual, [see more](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md)
-
-## How to get `appId`, `appSecret` of instagram?
-
-> [Simple setup](https://developers.facebook.com/docs/instagram-basic-display-api/getting-started), you only need to complete first 3 steps.
-
-> Then go to Instagram> Basic Display> Instagram App ID field
-
-<p align="center">
-  <img src="./assets/img-appid.png" width='100%'/>
-</p>
-
-This is going to give you an access_token, which one can be used on the new Graph Api, go to https://developers.facebook.com/docs/instagram-basic-display-api/guides/getting-profiles-and-media for docs. 
-
-
-## Usage:
-
-#### For function component:
-
-```javascript
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import InstagramLogin from 'react-native-instagram-login';
-import CookieManager from '@react-native-community/cookies';
-
-export default function App() {
-  const insRef = useRef();
-  const [token, setToken] = useState(null);
-
-  const onClear = () => {
-    CookieManager.clearAll(true)
-      .then((res) => {
-        setToken(null);
-      });
-  };
-
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => insRef.current.show()}>
-        <Text style={{ color: 'white', textAlign: 'center' }}>Login now</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.btn, { marginTop: 10, backgroundColor: 'green' }]}
-        onPress={onClear}>
-        <Text style={{ color: 'white', textAlign: 'center' }}>Logout</Text>
-      </TouchableOpacity>
-      <Text style={{ margin: 10 }}>Token: {token?.access_token}</Text>
-      <InstagramLogin
-        ref={insRef}
-        appId='your-app-id'
-        appSecret='your-app-secret'
-        redirectUrl='your-redirect-Url'
-        scopes={['user_profile', 'user_media']}
-        onLoginSuccess={(token) => setToken(token)}
-        onLoginFailure={(data) => console.log(data)}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  btn: {
-    borderRadius: 5,
-    backgroundColor: 'orange',
-    height: 30,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-});
-```
-
-#### For Class component
-
-```javascript
-import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import InstagramLogin from 'react-native-instagram-login';
-import CookieManager from '@react-native-community/cookies';
-
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      token: '',
-    };
-  }
-
-  setIgToken = (data) => {
-    console.log('data', data)
-    this.setState({ token: data.access_token })
-  }
-
-  onClear() {
-    CookieManager.clearAll(true)
-      .then((res) => {
-        this.setState({ token: null })
-      });
-  }
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => this.instagramLogin.show()}>
-          <Text style={{ color: 'white', textAlign: 'center' }}>Login now</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.btn, { marginTop: 10, backgroundColor: 'green' }]}
-          onPress={() => this.onClear()}>
-          <Text style={{ color: 'white', textAlign: 'center' }}>Logout</Text>
-        </TouchableOpacity>
-        <Text style={{ margin: 10 }}>Token: {this.state.token}</Text>
-        {this.state.failure && (
-          <View>
-            <Text style={{ margin: 10 }}>
-              failure: {JSON.stringify(this.state.failure)}
-            </Text>
-          </View>
-        )}
-        <InstagramLogin
-          ref={ref => (this.instagramLogin = ref)}
-          appId='your-app-id'
-          appSecret='your-app-secret'
-          redirectUrl='your-redirect-Url'
-          incognito={false}
-          scopes={['user_profile', 'user_media']}
-          onLoginSuccess={this.setIgToken}
-          onLoginFailure={(data) => console.log(data)}
-          language='tr' //default is 'en' for english
-        />
-      </View>
-    );
-  }
-}
-
-
-const styles = StyleSheet.create({
-  btn: {
-    borderRadius: 5,
-    backgroundColor: 'orange',
-    height: 30,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-});
-
+## 📂 Estructura
 
 ```
-
-## Props
-
-| Property       | Type             | Description                                               |
-| -------------- | ---------------- | --------------------------------------------------------- |
-| appId          | PropTypes.string | Instagram client_id                                       |
-| appSecret      | PropTypes.string | Instagram client_secret                                   |
-| responseType   | PropTypes.string | 'code' or 'token', default 'code'                         |
-| scopes         | PropTypes.array  | Login Permissions, default ['user_profile', 'user_media'] |
-| redirectUrl    | PropTypes.string | Your redirectUrl                                          |
-| incognito      | PropTypes.boolean| Incognito true/false                                      |
-| onLoginSuccess | PropTypes.func   | Function will be call back on success                     |
-| onLoginFailure | PropTypes.func   | Function will be call back on error                       |
-| onClose        | PropTypes.func   | Function will be call back on close modal                 |
-| modalVisible   | PropTypes.bool   | true or false                                             |
-| renderClose    | PropTypes.func   | Render function for customize close button                |
-| containerStyle | PropTypes.object | Customize container style                                 |
-| wrapperStyle   | PropTypes.object | Customize wrapper style                                   |
-| closeStyle     | PropTypes.object | Customize close style                                     |
-| language       | PropTypes.string | Override language of modal,alpha-2 eg:"es","tr" etc.      |
-
-## Server side explicit: [Discuss here](https://github.com/hungdev/react-native-instagram-login/issues/54)
-If you dont want to expose `appSecret` on the client, you dont need to pass `appSecret` props on client. And `onLoginSuccess` will callback a `code`.
-
-On your server (Backend) you have to call an api `https://api.instagram.com/oauth/access_token` with method `post` to exchange the code for a token, and params:
-
-```
-client_id: your-app-id
-client_secret: your-app-secret
-grant_type: 'authorization_code'
-redirect_uri: your-redirect-url
-code: code-get-from-onLoginSuccess-props
+Example/.buckconfig
+Example/.flowconfig
+Example/.gitattributes
+Example/.gitignore
+Example/.watchmanconfig
+Example/__tests__
+Example/android
+Example/assets
+Example/ios
 ```
 
-[For example](https://github.com/hungdev/react-native-instagram-login/blob/master/Instagram.js#L71-L88)
+## 🚀 Empezar
 
-The response will look like this:
-
-```
-{
-  "access_token": "IGQVJ...",
-  "user_id": 17841405793187218
-}
+```bash
+git clone https://github.com/Harkor421/react-native-instagram-login.git
+cd react-native-instagram-login
+npm install
 ```
 
+## 📜 Scripts
 
-## Logout
+| Comando | Qué hace |
+|---|---|
+| `npm run test` | Ejecuta la suite de tests |
 
-To logout use clear cookies by using https://github.com/react-native-community/cookies
+---
 
-```js
-import CookieManager from '@react-native-community/cookies';
+<div align="center">
 
-  logout() {
-    CookieManager.clearAll(true)
-      .then((res) => {
-        console.log('CookieManager.clearAll =>', res);
-        this.setState({ token: '' })
-      });
-  }
- ```
-  ## Contributing
-  Special thanks [@AlbertoIHP](https://github.com/AlbertoIHP) for v2.
+Hecho por [**Samir González**](https://github.com/Harkor421)
 
-  This project exists thanks to all the people who contribute. [[Contribute]](https://github.com/hungdev/react-native-instagram-login/graphs/contributors).
-
- ## Pull request
-  Pull requests are welcome!
+</div>
