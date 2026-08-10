@@ -6,6 +6,7 @@ import {
 import qs from 'qs';
 import axios from 'axios';
 import { WebView } from 'react-native-webview';
+
 const { width, height } = Dimensions.get('window');
 
 const patchPostMessageJsCode = `(${String(function () {
@@ -42,82 +43,79 @@ export default class Instagram extends Component {
   async onNavigationStateChange(webViewState) {
     const { url } = webViewState;
     const { key } = this.state;
-    if (
-      webViewState.title === 'Instagram' &&
-      webViewState.url === 'https://www.instagram.com/'
-    ) {
+
+    // Increment key to reload WebView when on the Instagram homepage
+    if (webViewState.title === 'Instagram' && webViewState.url === 'https://www.instagram.com/') {
       this.setState({ key: key + 1 });
     }
+
+    // Check if URL matches redirect URL
     if (url && url.startsWith(this.props.redirectUrl)) {
       this.webView.stopLoading();
       const match = url.match(/(#|\?)(.*)/);
-      const results = qs.parse(match[2]);
+      const results = qs.parse(match ? match[2] : '');
       this.hide();
+
       if (results.access_token) {
-        // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
         this.props.onLoginSuccess(results.access_token, results);
       } else if (results.code) {
-        //Fetching to get token with appId, appSecret and code
-        let { code } = results;
-        code = code.split('#_').join('');
-        const { appId, appSecret, redirectUrl, responseType } = this.props;
-        if (responseType === 'code' && !appSecret) {
-          if (code) {
-            this.props.onLoginSuccess(code, results);
-          } else {
-            this.props.onLoginFailure(results);
-          }
-        } else {
-          let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-          let http = axios.create({
-            baseURL: 'https://api.instagram.com/oauth/access_token',
-            headers: headers,
-            withCredentials: false,
-          });
-          let form = new FormData();
-          form.append('client_id', appId);
-          form.append('client_secret', appSecret);
-          form.append('grant_type', 'authorization_code');
-          form.append('redirect_uri', redirectUrl);
-          form.append('code', code);
-          let res = await http.post('/', form).catch((error) => {
-            console.log(error.response);
-            return false;
-          });
-
-          if (res) {
-            this.props.onLoginSuccess(res.data, results);
-          } else {
-            this.props.onLoginFailure(results);
-          }
-        }
+        await this.handleCodeResponse(results.code);
       } else {
         this.props.onLoginFailure(results);
       }
     }
   }
 
+  async handleCodeResponse(code) {
+    const { appId, appSecret, redirectUrl, responseType } = this.props;
+
+    // Clean up the code string
+    const cleanedCode = code.split('#_').join('');
+
+    if (responseType === 'code' && !appSecret) {
+        if (cleanedCode) {
+            this.props.onLoginSuccess(cleanedCode);
+        } else {
+            this.props.onLoginFailure({});
+        }
+    } else {
+        // Make a request to get the access token
+        try {
+            const res = await axios.post('https://api.instagram.com/oauth/access_token', 
+            new URLSearchParams({
+                client_id: appId,
+                client_secret: appSecret,
+                grant_type: 'authorization_code',
+                redirect_uri: redirectUrl,
+                code: cleanedCode,
+            }), 
+            {
+                withCredentials: false, // Disable cookie handling
+            });
+
+            this.props.onLoginSuccess(res.data);
+        } catch (error) {
+            console.error(error.response || error.message);
+            this.props.onLoginFailure({});
+        }
+    }
+}
+
   onMessage(reactMessage) {
     try {
       const json = JSON.parse(reactMessage.nativeEvent.data);
-      if (json && json.error_type) {
+      if (json?.error_type) {
         this.hide();
         this.props.onLoginFailure(json);
       }
-    } catch (err) { }
+    } catch (err) {
+      console.error('Error parsing message:', err);
+    }
   }
-
-  // _onLoadEnd () {
-  //   const scriptToPostBody = "window.postMessage(document.body.innerText, '*')"
-  //     this.webView.injectJavaScript(scriptToPostBody)
-  // }
 
   renderClose() {
     const { renderClose } = this.props;
-    if (renderClose) {
-      return renderClose();
-    }
-    return (
+    return renderClose ? renderClose() : (
       <Image
         source={require('./assets/close-button.png')}
         style={styles.imgClose}
@@ -127,29 +125,23 @@ export default class Instagram extends Component {
   }
 
   onClose() {
-    const { onClose } = this.props;
-    if (onClose) {
-      onClose();
-    }
-    // Reuse hide state update logic
+    this.props.onClose?.();
     this.hide();
   }
 
   renderWebview() {
-    const { appId, appSecret, redirectUrl, scopes, responseType,language='en', incognito=false } = this.props;
+    const { appId, redirectUrl, scopes, responseType, language = 'en', incognito = false } = this.props;
     const { key } = this.state;
 
-    let ig_uri = `https://api.instagram.com/oauth/authorize/?client_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
+    const ig_uri = `https://api.instagram.com/oauth/authorize/?client_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
 
     return (
       <WebView
         {...this.props}
         key={key}
         incognito={incognito}
-        style={[styles.webView, this.props.styles.webView]}
-        source={{ uri: ig_uri,headers: {
-          "Accept-Language": `${language}`,
-        } }}
+        style={[styles.webView, this.props.styles?.webView]}
+        source={{ uri: ig_uri, headers: { "Accept-Language": language } }}
         startInLoadingState
         onNavigationStateChange={this.onNavigationStateChange.bind(this)}
         onError={this.onNavigationStateChange.bind(this)}
@@ -163,8 +155,6 @@ export default class Instagram extends Component {
   render() {
     const { wrapperStyle, containerStyle, closeStyle } = this.props;
 
-    // Bind onClose to onRequestClose callback rather than hide to ensure that the (optional)
-    // onClose callback provided by client is called when dialog is dismissed
     return (
       <Modal
         animationType={'slide'}
@@ -178,8 +168,7 @@ export default class Instagram extends Component {
           <TouchableOpacity
             onPress={() => this.onClose()}
             style={[styles.close, closeStyle]}
-            accessibilityComponentType={'button'}
-            accessibilityTraits={['button']}>
+            accessibilityRole={'button'}>
             {this.renderClose()}
           </TouchableOpacity>
         </View>
@@ -187,21 +176,24 @@ export default class Instagram extends Component {
     );
   }
 }
-const propTypes = {
+
+Instagram.propTypes = {
   appId: PropTypes.string.isRequired,
   appSecret: PropTypes.string,
   redirectUrl: PropTypes.string,
   scopes: PropTypes.array,
   onLoginSuccess: PropTypes.func,
-  modalVisible: PropTypes.bool,
   onLoginFailure: PropTypes.func,
+  modalVisible: PropTypes.bool,
   responseType: PropTypes.string,
   containerStyle: PropTypes.object,
   wrapperStyle: PropTypes.object,
   closeStyle: PropTypes.object,
+  renderClose: PropTypes.func,
+  styles: PropTypes.object,
 };
 
-const defaultProps = {
+Instagram.defaultProps = {
   redirectUrl: 'https://google.com',
   styles: {},
   scopes: ['user_profile', 'user_media'],
@@ -213,11 +205,8 @@ const defaultProps = {
   onLoginFailure: (failureJson) => {
     console.debug(failureJson);
   },
-  responseType: 'code'
+  responseType: 'code',
 };
-
-Instagram.propTypes = propTypes;
-Instagram.defaultProps = defaultProps;
 
 const styles = StyleSheet.create({
   webView: {
