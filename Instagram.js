@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet, View, Alert, Modal, Dimensions, TouchableOpacity, Image,
@@ -22,50 +22,46 @@ const patchPostMessageJsCode = `(${String(function () {
   window.postMessage = patchedPostMessage;
 })})();`;
 
-export default class Instagram extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalVisible: false,
-      key: 1,
-    };
+export default function Instagram(props) {
+  const { wrapperStyle, containerStyle, closeStyle, onLoginSuccess, onLoginFailure, redirectUrl, appId, appSecret, responseType, scopes, language = 'en', incognito = false } = props;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [key, setKey] = useState(1);
+  const webViewRef = useRef(null);
+
+  function show() {
+    setModalVisible(true);
   }
 
-  show() {
-    this.setState({ modalVisible: true });
+  function hide() {
+    setModalVisible(false);
   }
 
-  hide() {
-    this.setState({ modalVisible: false });
-  }
-
-  async onNavigationStateChange(webViewState) {
+  async function onNavigationStateChange(webViewState) {
     const { url } = webViewState;
-    const { key } = this.state;
+
     if (
       webViewState.title === 'Instagram' &&
       webViewState.url === 'https://www.instagram.com/'
     ) {
-      this.setState({ key: key + 1 });
+      setKey((k) => k + 1);
     }
-    if (url && url.startsWith(this.props.redirectUrl)) {
-      this.webView.stopLoading();
+    if (url && url.startsWith(redirectUrl)) {
+      webViewRef.current.stopLoading();
       const match = url.match(/(#|\?)(.*)/);
       const results = qs.parse(match[2]);
-      this.hide();
+      hide();
       if (results.access_token) {
         // Keeping this to keep it backwards compatible, but also returning raw results to account for future changes.
-        this.props.onLoginSuccess(results.access_token, results);
+        onLoginSuccess(results.access_token, results);
       } else if (results.code) {
         //Fetching to get token with appId, appSecret and code
         let { code } = results;
         code = code.split('#_').join('');
-        const { appId, appSecret, redirectUrl, responseType } = this.props;
         if (responseType === 'code' && !appSecret) {
           if (code) {
-            this.props.onLoginSuccess(code, results);
+            onLoginSuccess(code, results);
           } else {
-            this.props.onLoginFailure(results);
+            onLoginFailure(results);
           }
         } else {
           let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
@@ -86,107 +82,97 @@ export default class Instagram extends Component {
           });
 
           if (res) {
-            this.props.onLoginSuccess(res.data, results);
+            onLoginSuccess(res.data, results);
           } else {
-            this.props.onLoginFailure(results);
+            onLoginFailure(results);
           }
         }
       } else {
-        this.props.onLoginFailure(results);
+        onLoginFailure(results);
       }
     }
   }
 
-  onMessage(reactMessage) {
+  function onMessage(reactMessage) {
     try {
       const json = JSON.parse(reactMessage.nativeEvent.data);
       if (json && json.error_type) {
-        this.hide();
-        this.props.onLoginFailure(json);
+        hide();
+        onLoginFailure(json);
       }
-    } catch (err) { }
+    } catch (err) {}
   }
 
-  // _onLoadEnd () {
-  //   const scriptToPostBody = "window.postMessage(document.body.innerText, '*')"
-  //     this.webView.injectJavaScript(scriptToPostBody)
-  // }
-
-  renderClose() {
-    const { renderClose } = this.props;
-    if (renderClose) {
-      return renderClose();
+  function renderClose() {
+    if (props.renderClose) {
+      return props.renderClose();
     }
     return (
       <Image
         source={require('./assets/close-button.png')}
         style={styles.imgClose}
-        resizeMode="contain"
+        resizeMode='contain'
       />
     );
   }
 
-  onClose() {
-    const { onClose } = this.props;
-    if (onClose) {
-      onClose();
+  function onClose() {
+    if (props.onClose) {
+      props.onClose();
     }
     // Reuse hide state update logic
-    this.hide();
+    hide();
   }
 
-  renderWebview() {
-    const { appId, appSecret, redirectUrl, scopes, responseType,language='en', incognito=false } = this.props;
-    const { key } = this.state;
-
+  function renderWebview() {
     let ig_uri = `https://api.instagram.com/oauth/authorize/?client_id=${appId}&redirect_uri=${redirectUrl}&response_type=${responseType}&scope=${scopes.join(',')}`;
 
     return (
       <WebView
-        {...this.props}
+        {...props}
         key={key}
         incognito={incognito}
-        style={[styles.webView, this.props.styles.webView]}
-        source={{ uri: ig_uri,headers: {
-          "Accept-Language": `${language}`,
-        } }}
+        style={[styles.webView, props.styles.webView]}
+        source={{
+          uri: ig_uri,
+          headers: {
+            'Accept-Language': `${language}`,
+          },
+        }}
         startInLoadingState
-        onNavigationStateChange={this.onNavigationStateChange.bind(this)}
-        onError={this.onNavigationStateChange.bind(this)}
-        onMessage={this.onMessage.bind(this)}
-        ref={(webView) => { this.webView = webView; }}
+        onNavigationStateChange={onNavigationStateChange}
+        onError={onNavigationStateChange}
+        onMessage={onMessage}
+        ref={(webView) => {
+          webViewRef.current = webView;
+        }}
         injectedJavaScript={patchPostMessageJsCode}
       />
     );
   }
 
-  render() {
-    const { wrapperStyle, containerStyle, closeStyle } = this.props;
-
-    // Bind onClose to onRequestClose callback rather than hide to ensure that the (optional)
-    // onClose callback provided by client is called when dialog is dismissed
-    return (
-      <Modal
-        animationType={'slide'}
-        visible={this.state.modalVisible}
-        onRequestClose={this.onClose.bind(this)}
-        transparent>
-        <View style={[styles.container, containerStyle]}>
-          <View style={[styles.wrapper, wrapperStyle]}>
-            {this.renderWebview()}
-          </View>
-          <TouchableOpacity
-            onPress={() => this.onClose()}
-            style={[styles.close, closeStyle]}
-            accessibilityComponentType={'button'}
-            accessibilityTraits={['button']}>
-            {this.renderClose()}
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    );
-  }
+  return (
+    <Modal
+      animationType={'slide'}
+      visible={modalVisible}
+      onRequestClose={onClose}
+      transparent
+    >
+      <View style={[styles.container, containerStyle]}>
+        <View style={[styles.wrapper, wrapperStyle]}>{renderWebview()}</View>
+        <TouchableOpacity
+          onPress={() => onClose()}
+          style={[styles.close, closeStyle]}
+          accessibilityComponentType={'button'}
+          accessibilityTraits={['button']}
+        >
+          {renderClose()}
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  );
 }
+
 const propTypes = {
   appId: PropTypes.string.isRequired,
   appSecret: PropTypes.string,
